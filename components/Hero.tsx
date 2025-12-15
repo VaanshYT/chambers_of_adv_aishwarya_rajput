@@ -3,7 +3,7 @@ import { motion, Variants } from 'framer-motion';
 
 // Use a direct relative path string. 
 // This relies on the server serving the 'components' directory relative to the index.html.
-const heroBg = "components/abb.jpeg";
+import heroBg from './abb.jpeg';
 
 const Hero: React.FC = () => {
   const containerVariants: Variants = {
@@ -32,21 +32,21 @@ const Hero: React.FC = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center text-center px-4">
       {/* Background with overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-30"
         style={{ backgroundImage: `url(${heroBg})` }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-b from-regal-black/60 via-regal-black/20 to-regal-black"></div>
-      
-      <motion.div 
+
+      <motion.div
         className="relative z-10 max-w-5xl mx-auto space-y-8"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.div variants={childVariants} className="flex flex-col items-center">
-             <div className="h-[1px] w-24 bg-antique-gold mb-6"></div>
-             <p className="text-antique-gold tracking-[0.2em] text-sm uppercase font-semibold">Legal Excellence & Financial Insight</p>
+          <div className="h-[1px] w-24 bg-antique-gold mb-6"></div>
+          <p className="text-antique-gold tracking-[0.2em] text-sm uppercase font-semibold">Legal Excellence & Financial Insight</p>
         </motion.div>
 
         <motion.h1 variants={childVariants} className="font-serif text-5xl md:text-7xl lg:text-8xl text-cream leading-tight">
@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
         </motion.p>
 
         <motion.div variants={childVariants} className="pt-8">
-          <a 
+          <a
             href="#contact"
             className="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-serif font-medium tracking-tighter text-white border border-antique-gold transition-all duration-300 hover:text-regal-black hover:border-antique-gold"
           >
@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
       </motion.div>
 
       {/* Scroll indicator */}
-      <motion.div 
+      <motion.div
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 10, 0] }}

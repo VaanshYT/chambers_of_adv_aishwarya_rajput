@@ -14,6 +14,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Request Logging (for debugging)
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'ok', server: 'active' });
@@ -75,24 +81,31 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// Only start the server if running directly (local dev)
-// In Vercel, we export the app for the serverless function
+// Only handle static files and catch-all if NOT in Vercel
+// Vercel handles static assets automatically
+if (!process.env.VERCEL) {
+    // Serve static files from the React app
+    const __dirname = path.resolve();
+    app.use(express.static(path.join(__dirname, 'dist')));
+
+    // The "catchall" handler: for any request that doesn't
+    // match one above, send back React's index.html file.
+    app.use((req, res) => {
+        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    });
+} else {
+    // In Vercel, if we get here, it means no API route matched.
+    // Return 404 JSON to prevent HTML response crashing the frontend JSON parser.
+    app.use((req, res) => {
+        res.status(404).json({ error: 'API route not found', path: req.url });
+    });
+}
+
+// Local server start
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });
 }
-
-// Serve static files from the React app
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.use((req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
 
 export default app;

@@ -32,7 +32,16 @@ const ContactForm: React.FC = () => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get("content-type");
+            let data;
+
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await response.json();
+            } else {
+                // If text/html, it's likely a server error page (404/500)
+                const text = await response.text();
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
 
             if (response.ok) {
                 setStatus('success');
@@ -43,10 +52,11 @@ const ContactForm: React.FC = () => {
                 setStatus('error');
                 setErrorMessage(data.error || 'Something went wrong. Please try again.');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error submitting form:', error);
             setStatus('error');
-            setErrorMessage('Failed to connect to the server.');
+            // Show the actual error message if available
+            setErrorMessage(error.message || 'Failed to connect to the server.');
         }
     };
 
