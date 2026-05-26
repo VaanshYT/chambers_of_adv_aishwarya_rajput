@@ -17,9 +17,7 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <h4 className="text-xs font-bold tracking-widest uppercase text-antique-gold">Visit Us</h4>
               <p className="text-off-white/80 font-light leading-relaxed">
-                Office No. 13, Apollo House,<br/>
-                Near Bombay Samachar Marg,<br/>
-                Kala Ghoda, Mumbai.
+                DBS House, Prescott Street, Fort, Mumbai - 400 001
               </p>
             </div>
             <div className="space-y-4">
